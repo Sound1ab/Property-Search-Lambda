@@ -1,0 +1,124 @@
+version: 2.1
+
+executors:
+  nodejs:
+    docker:
+      - image: circleci/node:erbium
+        environment:
+          BUCKET: noted
+          REGION: us-east-1
+
+commands:
+  install-dependencies:
+    description: 'Install node module dependencies'
+    steps:
+      - run: yarn install --frozen-lockfile
+  cache-dependencies:
+    description: 'Cache the node_modules'
+    steps:
+      - save_cache:
+          key: v4-node_modules-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+  restore-cached-dependencies:
+    description: 'Restore node modules from the cache'
+    steps:
+      - restore_cache:
+          keys:
+            - v4-node_modules-{{ checksum "yarn.lock" }}
+  run-unit-tests:
+    description: 'Run unit tests'
+    steps:
+      - run: yarn test --ci --runInBand
+  run-linter-check:
+    description: 'Run linter'
+    steps:
+      - run: yarn lint
+  run-typescript-check:
+    description: 'Run typescript tests'
+    steps:
+      - run: yarn ts
+  configure-aws:
+    description: 'Install dependencies for AWS and Serverless'
+    steps:
+      - run: sudo apt-get install python-dev python-pip
+      - run: sudo pip install awscli
+      - run: sudo npm i -g serverless
+
+jobs:
+  prepare:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-cached-dependencies
+      - install-dependencies
+      - cache-dependencies
+  test:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-cached-dependencies
+      - run-unit-tests
+  eslint:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-cached-dependencies
+      - run-linter-check
+  typescript:
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-cached-dependencies
+      - run-typescript-check
+  deploy:
+    parameters:
+      stage:
+        description: 'The stage to deploy to.'
+        type: string
+      env:
+        description: 'The environment to deploy to.'
+        type: string
+    executor: nodejs
+    steps:
+      - checkout
+      - restore-cached-dependencies
+      - configure-aws
+      - run: export NODE_ENV=<< parameters.env >> && . ./.circleci/build_env.sh && sls deploy --stage << parameters.stage >>
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - prepare
+      - test:
+          requires:
+            - prepare
+      - eslint:
+          requires:
+            - prepare
+      - typescript:
+          requires:
+            - prepare
+
+      - deploy:
+          name: deploy-development
+          stage: dev
+          env: development
+          requires:
+            - test
+            - eslint
+            - typescript
+          filters:
+            branches:
+              only: master
+      - approve-production:
+          type: approval
+          requires:
+            - deploy-development
+      - deploy:
+          name: deploy-production
+          stage: prod
+          env: production
+          requires:
+            - approve-production
