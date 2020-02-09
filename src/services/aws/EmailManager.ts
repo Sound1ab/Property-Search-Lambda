@@ -27,7 +27,7 @@ export class EmailManager {
         },
         Subject: {
           Charset: 'UTF-8',
-          Data: 'Test email',
+          Data: "Phill's Flat Club",
         },
       },
       Source: process.env.SERVERLESS_APP_SOURCE!,
