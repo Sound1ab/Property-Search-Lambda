@@ -1,6 +1,6 @@
-import {TMaybeListings} from "../interfaces"
-import {createBody} from "./createBody"
-import {createCard} from "./createCard"
+import { TMaybeListings } from '../interfaces'
+import { createBody } from './createBody'
+import { createCard } from './createCard'
 
 export function createEmail(listings: readonly TMaybeListings[]) {
   const NA = 'Not available'
@@ -10,7 +10,11 @@ export function createEmail(listings: readonly TMaybeListings[]) {
       address: listing?.displayable_address ?? NA,
       available: listing?.available_from_display ?? NA,
       bedrooms: listing?.num_bedrooms ?? NA,
-      description: listing?.description ?? NA,
+      description: listing?.short_description ?? NA,
+      floorPlan:
+        listing?.floor_plan && listing.floor_plan[0]
+          ? listing.floor_plan[0]
+          : undefined,
       estateAgent: {
         address: listing?.agent_address ?? NA,
         tel: listing?.agent_phone ?? NA,

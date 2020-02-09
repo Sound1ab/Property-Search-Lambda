@@ -6,6 +6,7 @@ interface ICreateCard {
   bedrooms: string
   zoopla: string
   gmap?: string
+  floorPlan?: string
   image: string
   estateAgent: {
     address: string
@@ -25,6 +26,7 @@ export function createCard({
   price,
   published,
   zoopla,
+  floorPlan,
 }: ICreateCard) {
   return `<mj-wrapper>
       <mj-section background-color="white" padding="0">
@@ -42,6 +44,9 @@ export function createCard({
       <mj-section background-color="white" padding="0">
         <mj-column>
           <mj-image padding="0" src="${image}" />
+        </mj-column>
+        <mj-column>
+          <mj-image padding="0" src="${floorPlan}" />
         </mj-column>
       </mj-section>
       <mj-section background-color="white" padding="0">

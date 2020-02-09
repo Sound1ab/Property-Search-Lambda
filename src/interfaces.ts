@@ -46,6 +46,8 @@ export interface IListings {
   image_354_255_url: string
   image_url: string
   last_published_date: string
+  short_description: string
+  floor_plan: string[]
 }
 
 export type TMaybeListings = Partial<IListings>
