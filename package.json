@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
     "@types/jest": "^24.9.0",
+    "@types/mjml": "^4.0.3",
     "@types/node": "^11.13.0",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
@@ -33,6 +34,7 @@
     "aws-sdk": "^2.606.0",
     "axios": "^0.19.0",
     "dotenv": "^8.2.0",
+    "mjml": "^4.5.1",
     "serverless": "^1.51.0",
     "serverless-dotenv-plugin": "^2.1.1",
     "serverless-webpack": "^5.2.0",

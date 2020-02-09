@@ -19,7 +19,7 @@ export class DynamoManager {
     this.TableName = tableName
   }
 
-  public async create(id: string, values: Record<string, string>) {
+  public async create(id: string, values?: Record<string, string>) {
     const timestamp = new Date().getTime()
 
     const params = {
