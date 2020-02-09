@@ -8,7 +8,7 @@ import mjml2html from 'mjml'
 
 const emailManager = new EmailManager()
 
-export const hello: APIGatewayProxyHandler = async event => {
+export const hello: APIGatewayProxyHandler = async () => {
   const listings = await getPropertylistings()
 
   const unknownListings = await findUnknownListings(listings)
