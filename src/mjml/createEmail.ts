@@ -3,7 +3,7 @@ import { createBody } from './createBody'
 import { createCard } from './createCard'
 
 export function createEmail(listings: readonly TMaybeListings[]) {
-  const NA = 'Not available'
+  const NA = ''
 
   const cards = listings.map(listing =>
     createCard({

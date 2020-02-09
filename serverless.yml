@@ -41,6 +41,7 @@ functions:
       - http:
           method: get
           path: hello
+      schedule: cron(0 0 6 * * ?)
 
 resources:
   Resources:
