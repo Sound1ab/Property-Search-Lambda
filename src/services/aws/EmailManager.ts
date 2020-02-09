@@ -1,5 +1,3 @@
-import { AWSError } from 'aws-sdk/lib/error'
-import { Request } from 'aws-sdk/lib/request'
 import { SES } from 'aws-sdk'
 
 const config = {
@@ -15,7 +13,10 @@ export class EmailManager {
   public async send(html: string) {
     const params = {
       Destination: {
-        ToAddresses: ['info@phillipparker.io'],
+        ToAddresses: [
+          process.env.SERVERLESS_APP_TO_PRIMARY!,
+          process.env.SERVERLESS_APP_TO_SECONDARY!,
+        ],
       },
       Message: {
         Body: {
@@ -23,17 +24,13 @@ export class EmailManager {
             Charset: 'UTF-8',
             Data: html,
           },
-          // Text: {
-          //   Charset: 'UTF-8',
-          //   Data: 'This is the message body in text format.',
-          // },
         },
         Subject: {
           Charset: 'UTF-8',
           Data: 'Test email',
         },
       },
-      Source: 'phillip-parker@outlook.com',
+      Source: process.env.SERVERLESS_APP_SOURCE!,
     }
 
     try {

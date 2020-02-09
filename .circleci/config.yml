@@ -102,9 +102,9 @@ workflows:
             - prepare
 
       - deploy:
-          name: deploy-development
-          stage: dev
-          env: development
+          name: deploy-production
+          stage: prod
+          env: production
           requires:
             - test
             - eslint
@@ -112,13 +112,3 @@ workflows:
           filters:
             branches:
               only: master
-      - approve-production:
-          type: approval
-          requires:
-            - deploy-development
-      - deploy:
-          name: deploy-production
-          stage: prod
-          env: production
-          requires:
-            - approve-production
