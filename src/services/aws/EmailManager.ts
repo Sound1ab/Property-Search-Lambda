@@ -15,7 +15,6 @@ export class EmailManager {
       Destination: {
         ToAddresses: [
           process.env.SERVERLESS_APP_TO_PRIMARY!,
-          process.env.SERVERLESS_APP_TO_SECONDARY!,
         ],
       },
       Message: {
@@ -37,7 +36,7 @@ export class EmailManager {
       const response = await ses.sendEmail(params).promise()
       return response
     } catch (error) {
-      return null
+      return error
     }
   }
 }
