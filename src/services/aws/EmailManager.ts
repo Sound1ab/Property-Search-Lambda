@@ -32,11 +32,6 @@ export class EmailManager {
       Source: process.env.SERVERLESS_APP_SOURCE!,
     }
 
-    try {
-      const response = await ses.sendEmail(params).promise()
-      return response
-    } catch (error) {
-      return error
-    }
+    return await ses.sendEmail(params).promise()
   }
 }
